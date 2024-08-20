@@ -1,0 +1,32 @@
+# Dependency directories
+node_modules/
+
+# Debug log from npm
+npm-debug.log
+
+# Environment Variables should NEVER be published
+.env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+*.lnk
+
+
+# VS Code
+.vscode/*
+
+# local data for init DB first time
+/db/data.json
+/db/devices.json
+/db/index.js
+/db/qrswift.db
+
+# REST Api testing
+/Requests
