@@ -20,8 +20,9 @@ app.use(session({
 }));
 app.use(
   cors({
-    origin: [ORIGIN],
-    methods:["POST","GET","DELETE","PUT"]
+    origin: ORIGIN,
+    methods:["POST","GET","DELETE","PUT"],
+    credentials: true,
   })
 );
 app.use(logger('dev'));
