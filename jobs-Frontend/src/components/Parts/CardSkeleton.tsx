@@ -10,7 +10,7 @@ const CardSkeleton = ({ cards }: Iprops) => {
           <div
             key={i}
             role="status"
-            className="max-w-sm animate-pulse min-w-full bg-slate-100 h-16 flex  items-center"
+            className="max-w-sm animate-pulse min-w-full bg-slate-100 h-16 flex items-center"
           >
             <div className="ml-3 h-6 dark:bg-slate-200 w-1/3"></div>
           </div>
