@@ -85,8 +85,6 @@ export default function Application() {
         pr_potentialjob: JobId,
         pr_salary: applicant.pr_salary,
       };
-      console.log(objData);
-      
       await restService.createCandidte(objData).then(() => navigate("/Submission"));
     } catch (error) {
       console.log(error);
