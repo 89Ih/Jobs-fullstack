@@ -1,4 +1,5 @@
 # Jobseeker Application
+![Jobseeker Application](./jobs-Frontend/public/favicon.ico)
 
 This is a jobseeker application built with **React** and **TypeScript**, leveraging the design power of **Material UI** and **Tailwind CSS**.
 
