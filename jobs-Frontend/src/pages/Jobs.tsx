@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import OptGruop from "../components/Parts/OptGroup";
@@ -39,7 +40,7 @@ const Jobs = () => {
     }
     if (tJob !== null || "") {
       return setQueries(
-        queries.filter(({ pr_jobtitle, pr_cities }) =>
+        queries.filter(({ pr_jobtitle }) =>
           pr_jobtitle.toLowerCase().includes(tJob?.toLowerCase())
         )
       );
@@ -54,7 +55,6 @@ const Jobs = () => {
   }
 
   useEffect(() => {
-    // callCities()
     if (matches) {
       setOpenUp(false)
     }
