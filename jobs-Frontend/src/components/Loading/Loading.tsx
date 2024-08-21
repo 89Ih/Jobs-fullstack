@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import "./Loading.css";
 import { useNavigate } from "react-router-dom";
 
-const time: number = 5000; // Ensure time is always a number
+const time = 5000;
 
 const Loading = () => {
   const navigate = useNavigate();

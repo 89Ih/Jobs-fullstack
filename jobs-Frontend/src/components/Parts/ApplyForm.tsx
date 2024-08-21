@@ -1,24 +1,24 @@
 import { TextField } from "@mui/material";
-import { FC, ReactNode, useEffect,Children } from "react";
+import { FC, ReactNode,Children, ChangeEvent } from "react";
 
 interface IForm {
-  label: any;
+  label: string;
   children: ReactNode;
   onSubmit:()=> void
 }
 interface IGroupField {
-  label: any;
+  label: string;
   children: ReactNode;
 }
 interface IField {
   label: string;
   type: string;
-  value:any;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+  value:string | number;
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement >) => void,
   required:boolean
   
 }
-const ApplyForm: FC<IForm> & { GroupField: FC<IGroupField> & { Field: FC<IField> } } = ({ children,label,onSubmit }) => {
+const ApplyForm: FC<IForm> & { GroupField: FC<IGroupField> & { Field: FC<IField> } } = ({ children,label,onSubmit }:IForm) => {
 
 
   return (
@@ -34,9 +34,6 @@ const ApplyForm: FC<IForm> & { GroupField: FC<IGroupField> & { Field: FC<IField>
 };
 const GroupField: FC<IGroupField> = ({ label, children }) => {
   const count = Children.count(children);
-  useEffect(()=>{
-    
-  })
   return (
     <fieldset className="w-full flex flex-col gap-3 mb-3">
       <legend className="mb-4  text-slate-800 font-semibold text-xl">{label}</legend>

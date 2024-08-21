@@ -38,9 +38,6 @@ const Countries: FC<ICountries> = ({paragraphRef,value,onChange}) => {
       setCountries(data);
     }
     fetchCountry();
-    if (show === false) {
-
-    }
   }, [selectCountry, show]);
   return (
     <div className="flex flex-col w-full ">

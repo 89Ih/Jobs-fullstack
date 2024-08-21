@@ -18,8 +18,6 @@ router.get("/jobs", async (req, res) => {
     } catch (error) {
         res.status(500).send(error)
     }
-
-
 });
 /* POST candidate data into Dataverse */
 router.post("/application", async (req, res) => {
@@ -36,7 +34,7 @@ router.post("/application", async (req, res) => {
         gendercode: req.body.gendercode,
         birthdate: req.body.birthdate,
         pr_edu: req.body.pr_edu,
-        pr_graduationyear: req.body.pr_graduationyear,
+        pr_graduationyear_txt: req.body.pr_graduationyear_txt,
         pr_noticeperiod: req.body.pr_noticeperiod,
         pr_salary: req.body.pr_salary,
         "pr_potentialjob@odata.bind": `/entities(${req.body.pr_potentialjob})`,

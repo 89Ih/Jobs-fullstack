@@ -1,5 +1,5 @@
 import {ChangeEvent,useCallback,useEffect,useRef,useState} from "react";
-import { Button, Checkbox } from "@mui/material";
+import { Button, Checkbox, SelectChangeEvent } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { eduData, GenderData, noticePeriodData } from "./_static";
 import ApplyForm from "../components/Parts/ApplyForm";
@@ -21,7 +21,7 @@ interface IApplicant {
   gendercode?: number;
   birthdate?: string;
   pr_edu?: number;
-  pr_graduationyear?: number;
+  pr_graduationyear_txt?: string;
   pr_noticeperiod?: number;
   pr_salary?: number;
   pr_potentialjob?: string | null;
@@ -33,9 +33,9 @@ export default function Application() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const JobTitle = urlParams.get("titl");
-  const [phoneNumber, setPhoneNumber] = useState<any>({
-    countryCode: null,
-    tel: null,
+  const [phoneNumber, setPhoneNumber] = useState<{countryCode:string|undefined|null,tel:string}>({
+    countryCode: "",
+    tel: "",
   });
   const handleTelNumber = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ export default function Application() {
     gendercode: undefined,
     birthdate: undefined,
     pr_edu: undefined,
-    pr_graduationyear: undefined,
+    pr_graduationyear_txt: "",
     pr_noticeperiod: undefined,
     pr_salary: undefined,
     pr_potentialjob: JobId,
@@ -80,7 +80,7 @@ export default function Application() {
         gendercode: applicant.gendercode,
         birthdate: applicant.birthdate,
         pr_edu: applicant.pr_edu,
-        pr_graduationyear: applicant.pr_graduationyear,
+        pr_graduationyear_txt: applicant.pr_graduationyear_txt,
         pr_noticeperiod: applicant.pr_noticeperiod,
         pr_potentialjob: JobId,
         pr_salary: applicant.pr_salary,
@@ -94,11 +94,11 @@ export default function Application() {
   const handleChange = useCallback(
     (
       event: ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >,
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement 
+      >| SelectChangeEvent,
       field: keyof IApplicant
     ) => {
-      let value: string | Date | undefined | number = event.target.value;
+      const value: string | Date | undefined | number = event.target.value;
       setApplicant({ ...applicant, [field]: value });
     },
     [applicant]
@@ -127,9 +127,8 @@ export default function Application() {
   //     }
   //   });
   // };
-  useEffect(() => {
-
-  }, [applicant,paragraphRef,phoneNumber]);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  useEffect(() => {}, [applicant,paragraphRef,phoneNumber]);
   return (
     <section className="w-full flex flex-col items-center h-full">
       <ApplyForm label={`${JobTitle}`} onSubmit={handleSubmit}>
@@ -138,21 +137,21 @@ export default function Application() {
             required={true}
             label="First Name"
             type="text"
-            value={applicant.firstname}
+            value={applicant.firstname || ""}
             onChange={(event) => handleChange(event, "firstname")}
           />
           <Field
             required={true}
             label="Last Name"
             type="text"
-            value={applicant.lastname}
+            value={applicant.lastname || ""}
             onChange={(event) => handleChange(event, "lastname")}
           />
           <Field
             required={true}
             label="Date of Birth"
             type="date"
-            value={applicant.birthdate}
+            value={applicant.birthdate || ""}
             onChange={(event) => handleChange(event, "birthdate")}
           />
           <Options
@@ -181,7 +180,7 @@ export default function Application() {
             required={false}
             label="Email"
             type="email"
-            value={applicant.emailaddress1}
+            value={applicant.emailaddress1 ||""}
             onChange={(event) => handleChange(event, "emailaddress1")}
           />
         </GroupField>
@@ -190,28 +189,28 @@ export default function Application() {
             required={false}
             label="Street"
             type="text"
-            value={applicant.address1_line1}
+            value={applicant.address1_line1 || ""}
             onChange={(event) => handleChange(event, "address1_line1")}
           />
           <Field
             required={false}
             label="ZIP"
             type="number"
-            value={applicant.address1_postalcode}
+            value={applicant.address1_postalcode || ""}
             onChange={(event) => handleChange(event, "address1_postalcode")}
           />
           <Field
             required={false}
             label="City"
             type="text"
-            value={applicant.address1_city}
+            value={applicant.address1_city || ""}
             onChange={(event) => handleChange(event, "address1_city")}
           />
           <Field
             required={false}
             label="Country"
             type="text"
-            value={applicant.address1_country}
+            value={applicant.address1_country || ""}
             onChange={(event) => handleChange(event, "address1_country")}
           />
         </GroupField>
@@ -230,8 +229,8 @@ export default function Application() {
             required={false}
             label="graduation year"
             type="number"
-            value={applicant.pr_graduationyear}
-            onChange={(event) => handleChange(event, "pr_graduationyear")}
+            value={applicant.pr_graduationyear_txt || ""}
+            onChange={(event) => handleChange(event, "pr_graduationyear_txt")}
           />
         </GroupField>
         <GroupField label="Availability">
@@ -249,7 +248,7 @@ export default function Application() {
             required={false}
             label="Salary Expection"
             type="number"
-            value={applicant.pr_salary}
+            value={applicant.pr_salary || ''}
             onChange={(event) => handleChange(event, "pr_salary")}
           />
         </GroupField>
@@ -352,7 +351,7 @@ export default function Application() {
             </p>
           </div>
         </GroupField>
-        <GroupField label={undefined}>
+        <GroupField label={""}>
           <div className="flex justify-center items-center  min-w-full text-base">
             <Button
               color="success"

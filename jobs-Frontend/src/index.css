@@ -59,11 +59,22 @@ main {
 
 .w-25 {
   width: 25%;
-  animation: animateW25 500ms forwards; /* Apply the animation for w-25 */
+  /* animation: animateW25 500ms forwards;  */
 }
 
 /* Class for w-75 */
 .w-75 {
   width: 100%;
-  animation: animateW75 1000ms forwards;
+  /* animation: animateW75 1000ms forwards; */
+}
+._cardSkeleton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+._cardSkeleton > span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
