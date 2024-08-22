@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-
-body {
-  height: 100vh;
-}
 
 section {
   width: 1100px;
@@ -23,10 +13,6 @@ section {
   margin-top: 5px;
 }
 
-._searchContainer > div > select {
-  appearance: none;
-}
-
 #progressBar {
   width: 100%;
   height: 5px;
@@ -34,130 +20,34 @@ section {
 }
 
 #progressBar::-webkit-progress-bar {
-  background-color: #f9fafb; /* Background color of the progress bar container */
+  background-color: #f9fafb; 
 }
 
 #progressBar::-webkit-progress-value {
-  background-color: #0ea5e9; /* Color of the progress */
+  background-color: #0ea5e9; 
 }
 
 #progressBar::-moz-progress-bar {
-  background-color: #0ea5e9; /* Color of the progress for Firefox */
+  background-color: #0ea5e9; 
 }
 
-/* Footer.css */
-
-.footer-content {
-  border-top: 1px solid #80808048 !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 0;
-  color: #374558;
-  font-weight: 500;
-}
 
 .social-icons {
   margin-top: 10px;
 }
-
 .social-icons a {
   color: #374558;
   margin: 0 10px;
   font-size: 2em; /* Increased font size for Material-UI icons */
   transition: color 0.3s;
 }
-
 .social-icons a:hover {
   color: rgba(100, 116, 139, 0.877);
 }
-/* Page Not Found */
-.not-found-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 100%;
-  color: #1e293b;
-  /* background-color: #f1f5f9; */
-  text-align: center;
-}
-
-.not-found-title {
-  font-size: 6rem;
-  font-weight: bold;
-  color: rgb(100, 116, 139);
-  margin: 0;
-}
-
-.not-found-text {
-  font-size: 1.5rem;
-  margin: 20px 0;
-  color: #1e293b;
-}
-
-.not-found-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #f1f5f9;
-  background-color: rgb(56, 189, 248);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.not-found-button:hover {
-  background-color: rgb(30, 41, 59);
-}
-/* Page Success */
-.success-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 100%;
-  color: #1e293b;
-  /* background-color: #f1f5f9; */
-  text-align: center;
-}
-
-.success-title {
-  font-size: 6rem;
-  font-weight: bold;
-  color: rgb(34, 197, 94); /* Green color for success */
-  margin: 0;
-}
-
-.success-text {
-  font-size: 1.5rem;
-  margin: 20px 0;
-  color: #1e293b;
-}
-
-.success-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #f1f5f9;
-  background-color: rgb(34, 197, 94); /* Green color for button */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.success-button:hover {
-  background-color: rgb(22, 163, 74); /* Darker green on hover */
-}
-
 ._shadow {
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
-
-
 ._formWidth{
   width: 600px;
 }

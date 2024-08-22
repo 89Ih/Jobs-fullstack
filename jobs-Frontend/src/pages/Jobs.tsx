@@ -119,8 +119,8 @@ const Jobs = () => {
         <div className="mt-10 w-full flex gap-2 ">
           {queries.length === 0 
 
-          ?  (<div className={`flex flex-col gap-1 ${(!openUp) ? "w-75" : "w-25"}`} > <CardSkeleton cards={6} /></div>)
-          :  (<ul className={`flex flex-col gap-1 ${(!openUp) ? "w-75" : "w-25"}`}>
+          ?  (<div className="flex flex-col gap-1 min-w-full" > <CardSkeleton cards={6} /></div>)
+          :  (<ul className={`flex flex-col gap-1 ${(!openUp) ? "min-w-full" : "w-1/4"}`}>
             {queries?.map((v) => {
               return (
                 <li

@@ -54,7 +54,7 @@ export const Layout = ({ children }: Props) => {
       </header>
       <main>{children}</main>
       <footer className="min-w-full mt-20">
-        <div className="footer-content">
+        <div className="footer-content border-t border-solid border-gray-300 text-gray-600 flex flex-col items-center py-5 font-semibold">
           <p className="text-base">&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
           <div className="social-icons">
             <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
