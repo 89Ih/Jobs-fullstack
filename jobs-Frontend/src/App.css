@@ -31,14 +31,13 @@ section {
   background-color: #0ea5e9; 
 }
 
-
 .social-icons {
   margin-top: 10px;
 }
 .social-icons a {
   color: #374558;
   margin: 0 10px;
-  font-size: 2em; /* Increased font size for Material-UI icons */
+  font-size: 2em;
   transition: color 0.3s;
 }
 .social-icons a:hover {
@@ -52,7 +51,6 @@ section {
   width: 600px;
 }
 @media screen and (max-width: 1150px) {
-
   .MuiFormLabel-root{
   font-size: 14px !important;
 }
