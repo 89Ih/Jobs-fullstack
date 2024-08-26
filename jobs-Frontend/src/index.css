@@ -41,6 +41,11 @@ input[type="date"]:valid {
   color: black !important;
 }
 
+#workModelHous,
+#LocationId{
+  background-color: unset !important;
+}
+
 /* input[type="date"]::selection {
   color: "black";
 } */
