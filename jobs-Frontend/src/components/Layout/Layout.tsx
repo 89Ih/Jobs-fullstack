@@ -33,8 +33,8 @@ export const Layout = ({ children }: Props) => {
 
         <div className="w-full inline-flex justify-between px-3 items-center">
           <Link onClick={() => window.scroll(0, 0)} to={'/'} className='text-2xl font-semibold'>
-            <span className='text-slate-800 text-xl'>Job</span>
-            <span className='text-slate-500 text-xl'>Seeker</span></Link>
+            <span className='text-slate-800 text-2xl'>Job</span>
+            <span className='text-slate-500 text-2xl'>Seeker</span></Link>
           <div>
             <svg  width={matches ?"30px":"50px"} height={matches ?"30px":"50px"} viewBox="0 0 24 24" fill="none"
               xmlns="http://www.w3.org/2000/svg">
