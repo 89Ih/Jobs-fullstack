@@ -89,12 +89,13 @@ section {
   ._sub-header {
     display: none;
 
-
   } 
   .MuiFormLabel-root{
-    font-size: 13px !important;
+    font-size: 14px !important;
 
-
+  }
+  .MuiMenuItem-gutters{
+    font-size: 12px !important;
   }
   ._formWidth{
     width: 100%;
