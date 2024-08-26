@@ -1,11 +1,14 @@
-import {ChangeEvent,useCallback,useEffect,useRef,useState} from "react";
-import { Button, Checkbox, SelectChangeEvent } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { Box, Button, Checkbox, SelectChangeEvent } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { eduData, GenderData, noticePeriodData } from "./_static";
+import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
 import ApplyForm from "../components/Parts/ApplyForm";
 import Options from "../components/Parts/Options";
 import Countries from "../components/Parts/Countries";
 import restService from "../services/rest.service";
+import Upload from "../components/Parts/Upload";
+
 const { GroupField } = ApplyForm;
 const { Field } = GroupField;
 
@@ -17,14 +20,15 @@ interface IApplicant {
   address1_line1?: string;
   address1_city?: string;
   address1_postalcode?: string;
-  familystatuscode?: number;
-  gendercode?: number;
+  familystatuscode?: number |any;
+  gendercode?: number |any ;
   birthdate?: string;
-  pr_edu?: number;
+  pr_edu?: number |any ;
   pr_graduationyear_txt?: string;
-  pr_noticeperiod?: number;
-  pr_salary?: number;
+  pr_noticeperiod?: number |any;
+  pr_salary?: number |any;
   pr_potentialjob?: string | null;
+
 }
 export default function Application() {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
@@ -33,7 +37,8 @@ export default function Application() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const JobTitle = urlParams.get("titl");
-  const [phoneNumber, setPhoneNumber] = useState<{countryCode:string|undefined|null,tel:string}>({
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<{countryCode: string | undefined | null;tel: string;}>({
     countryCode: "",
     tel: "",
   });
@@ -45,7 +50,7 @@ export default function Application() {
         tel: value,
       });
     },
-    [ paragraphRef]
+    [paragraphRef]
   );
 
   const [applicant, setApplicant] = useState<IApplicant>({
@@ -57,35 +62,38 @@ export default function Application() {
     address1_city: "",
     address1_postalcode: undefined,
     familystatuscode: undefined,
-    gendercode: undefined,
+    gendercode: undefined ,
     birthdate: undefined,
-    pr_edu: undefined,
+    pr_edu: undefined ,
     pr_graduationyear_txt: "",
-    pr_noticeperiod: undefined,
+    pr_noticeperiod: undefined ,
     pr_salary: undefined,
     pr_potentialjob: JobId,
+   
   });
 
   async function handleSubmit() {
+
+    const formData = new FormData();
+    formData.append('file', currentFile as File);
+    formData.append('firstname', applicant.firstname as string);
+    formData.append('lastname', applicant.lastname as string);
+    formData.append('emailaddress1', applicant.emailaddress1 as string);
+    formData.append('mobilephone', phoneNumber.countryCode + phoneNumber.tel as string);
+    formData.append('address1_city', applicant.address1_city as string);
+    formData.append('address1_country', applicant.address1_country as string);
+    formData.append('address1_line1', applicant.address1_line1 as string);
+    formData.append('address1_postalcode', applicant.address1_postalcode as string);
+    formData.append('gendercode', applicant.gendercode as any);
+    formData.append('birthdate', applicant.birthdate as string);
+    formData.append('pr_edu', applicant.pr_edu as any);
+    formData.append('pr_graduationyear_txt', applicant.pr_graduationyear_txt as string);
+    formData.append('pr_noticeperiod', applicant.pr_noticeperiod as any);
+    formData.append('pr_salary', applicant.pr_salary as any);
+    formData.append('pr_potentialjob@odata.bind', `/entities(${JobId})` as string);
+   
     try {
-      const objData = {
-        firstname: applicant.firstname,
-        lastname: applicant.lastname,
-        emailaddress1: applicant.emailaddress1,
-        mobilephone: phoneNumber.countryCode+phoneNumber.tel,
-        address1_city: applicant.address1_city,
-        address1_country: applicant.address1_country,
-        address1_line1: applicant.address1_line1,
-        address1_postalcode: applicant.address1_postalcode,
-        gendercode: applicant.gendercode,
-        birthdate: applicant.birthdate,
-        pr_edu: applicant.pr_edu,
-        pr_graduationyear_txt: applicant.pr_graduationyear_txt,
-        pr_noticeperiod: applicant.pr_noticeperiod,
-        pr_potentialjob: JobId,
-        pr_salary: applicant.pr_salary,
-      };
-      await restService.createCandidte(objData).then(() => navigate("/Submission"));
+      await restService.createCandidte(formData).then(() =>  navigate("/Submission"));
     } catch (error) {
       console.log(error);
     }
@@ -93,9 +101,11 @@ export default function Application() {
 
   const handleChange = useCallback(
     (
-      event: ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement 
-      >| SelectChangeEvent,
+      event:
+        | ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+          >
+        | SelectChangeEvent,
       field: keyof IApplicant
     ) => {
       const value: string | Date | undefined | number = event.target.value;
@@ -103,32 +113,35 @@ export default function Application() {
     },
     [applicant]
   );
-  // const [currentFile, setCurrentFile] = useState<File>();
-  // const [fileName, setFileName] = useState<{
-  //   type: string;
-  //   fileName: string;
-  // }>();
-  // const handleResume = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const selectedFiles = e.target.files as FileList;
-  //   if (!selectedFiles || selectedFiles.length === 0) {
-  //     console.error("No files selected");
-  //     return;
-  //   }
-  //   const { name, type } = selectedFiles[0];
-  //   setCurrentFile(selectedFiles[0]);
-  //   const validTypes = [
-  //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  //     "application/pdf",
-  //   ];
+  
+  const [fileName, setFileName] = useState<{
+    type: string;
+    fileName: string;
+  }>();
 
-  //   validTypes.forEach((validType) => {
-  //     if (validType === type) {
-  //       setFileName({ type, fileName: name });
-  //     }
-  //   });
-  // };
+  const handleResume = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files as FileList;
+    console.log(selectedFiles);
+
+    if (!selectedFiles || selectedFiles.length === 0) {
+      console.error("No files selected");
+      return;
+    }
+    const { name, type } = selectedFiles[0];
+    setCurrentFile(selectedFiles[0]);
+    const validTypes = [
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/pdf",
+    ];
+
+    validTypes.forEach((validType) => {
+      if (validType === type) {
+        setFileName({ type, fileName: name });
+      }
+    });
+  };
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [applicant,paragraphRef,phoneNumber]);
+  useEffect(() => {}, [applicant, paragraphRef, phoneNumber,currentFile]);
   return (
     <section className="w-full flex flex-col items-center h-full">
       <ApplyForm label={`${JobTitle}`} onSubmit={handleSubmit}>
@@ -164,23 +177,16 @@ export default function Application() {
             bind={GenderData}
             onChange={(event) => handleChange(event, "gendercode")}
           />
-          {/* <Field
-            required={false}
-            label="Phone Number"
-            type="number"
-            value={applicant.mobilephone}
-            onChange={(event) => handleChange(event, "mobilephone")}
-          /> */}
           <Countries
             paragraphRef={paragraphRef}
             value={phoneNumber.tel}
-             onChange={(event) => handleTelNumber(event)}
+            onChange={(event) => handleTelNumber(event)}
           />
           <Field
             required={false}
             label="Email"
             type="email"
-            value={applicant.emailaddress1 ||""}
+            value={applicant.emailaddress1 || ""}
             onChange={(event) => handleChange(event, "emailaddress1")}
           />
         </GroupField>
@@ -248,76 +254,26 @@ export default function Application() {
             required={false}
             label="Salary Expection"
             type="number"
-            value={applicant.pr_salary || ''}
+            value={applicant.pr_salary || ""}
             onChange={(event) => handleChange(event, "pr_salary")}
           />
         </GroupField>
 
-        {/* <GroupField label=" Additional Information">
-          <div className="flex items-center gap-2 w-full">
-            <div className="shadow-gray-400 shadow-sm w-full bg-sky-100 h-20 flex flex-col justify-center items-center rounded-md">
-              <label
-                htmlFor="uploadOtherFiles"
-                className="flex flex-col items-center justify-center font-semibold text-slate-700 text-sm"
-              >
-                <svg
-                  className="border-dashed border-white border-2 rounded-lg hover:scale-125"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  height={30}
-                  width={35}
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                  />
-                </svg>
-                Other Files
-              </label>
-              <input
-                type="file"
-                name="Upload-Other-Files"
-                id="uploadOtherFiles"
-              />
-            </div>
-            <div className="shadow-gray-400 shadow-sm w-full bg-sky-100 h-20 flex flex-col justify-center items-center rounded-md">
-              <label
-                htmlFor="uploadResume"
-                className="flex flex-col items-center justify-center font-semibold text-slate-700 text-sm"
-              >
-                <svg
-                  className="border-dashed border-white border-2 rounded-lg hover:scale-125"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  height={30}
-                  width={35}
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                  />
-                </svg>
-                Resume *
-              </label>
-              <input
-                onChange={handleResume}
-                required
-                type="file"
-                name="upload_Resume"
-                id="uploadResume"
-              />
-            </div>
-          </div>
+        <GroupField label=" Additional Information">
+          <Upload
+            label={"Other Files"}
+            htmlFor={"uploadOtherFiles"}
+            name={"Upload-Other-Files"}
+            onChange={(event) => console.log(event.target.files)}
+          />
+          <Upload
+            label={"Resume *"}
+            htmlFor={"uploadResume"}
+            name={"upload_Resume"}
+            onChange={(event) => handleResume(event)}
+          />
         </GroupField>
-        <GroupField label={undefined}>
+        <GroupField label={""}>
           <div className="w-100 _fr _g7 mt-3 flex items-center gap-2">
             {fileName?.type === "application/pdf" ? (
               <Box
@@ -342,7 +298,7 @@ export default function Application() {
             )}
             {fileName?.fileName}
           </div>
-        </GroupField> */}
+        </GroupField>
         <GroupField label="Declarations and Agreement">
           <div className="flex items-center gap-2">
             <Checkbox required />

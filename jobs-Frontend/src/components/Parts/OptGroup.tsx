@@ -14,7 +14,7 @@ const OptGroup = ({ value, onChange }: IOptGroup) => {
         id="LocationId"
         value={value}
         onChange={onChange}
-        className="outline-none bg-none rounded-none pt-2 border-b-2  focus:border-blue-500 border-transparent hover:border-black text-base"
+        className="outline-none  rounded-none pt-2 border-b-2  focus:border-blue-500 border-transparent hover:border-black text-base"
       >
         <optgroup label=""><option value=""></option></optgroup>
         {LocationData.map(({ country, cities, id }) => (
