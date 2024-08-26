@@ -49,8 +49,11 @@ router.post("/application", async (req, res) => {
     return await authMSAL.createCandidate(candidateData).then((apiRes) => {
       const { data, contactId } = apiRes;
       res.status(201).json(data);
-      if (Object.keys(files).length > 0 && contactId) {
-        return authMSAL.sendFiles(fields, files, contactId);
+      if (Object.keys(files).length === 0) {
+        return
+      }
+      if (contactId) {
+        return authMSAL.sendFiles(fields, files, contactId)
       }
     });
   });
