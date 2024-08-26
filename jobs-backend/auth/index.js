@@ -83,7 +83,6 @@ class AuthMSAL {
     const obj = { data, contactId };
     return obj;
   }
-
   /**
    * @param {File} fileParam
    * @param {string} contactId

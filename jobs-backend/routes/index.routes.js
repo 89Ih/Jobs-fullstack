@@ -43,8 +43,9 @@ router.post("/application", async (req, res) => {
       pr_noticeperiod: Number(fields.pr_noticeperiod[0]) || -1,
       pr_salary: Number(fields.pr_salary[0]) || null,
       "pr_potentialjob@odata.bind": fields["pr_potentialjob@odata.bind"][0],
+      pr_jobopportunity_set: 125620001
     };
-    console.log(candidateData);
+
 
     return await authMSAL.createCandidate(candidateData).then((apiRes) => {
       const { data, contactId } = apiRes;
