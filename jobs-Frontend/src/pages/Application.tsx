@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { Box, Button, Checkbox, SelectChangeEvent } from "@mui/material";
+import { Box, Button, Checkbox, CircularProgress, SelectChangeEvent } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
 import ApplyForm, { IApplicant } from "../components/Parts/ApplyForm";
@@ -15,6 +15,7 @@ const { Field } = GroupField;
 
 export default function Application() {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
+  const [loader, setloader] = useState<boolean>(false);
   const navigate = useNavigate();
   const JobId: string | undefined = useParams().id;
   const queryString = window.location.search;
@@ -43,22 +44,22 @@ export default function Application() {
     address1_line1: "",
     address1_country: "",
     address1_city: "",
-    address1_postalcode: undefined,
-    familystatuscode: undefined,
-    gendercode: undefined ,
-    birthdate: undefined,
-    pr_edu: undefined ,
+    address1_postalcode: "",
+    familystatuscode: "",
+    gendercode: "" ,
+    birthdate:"",
+    pr_edu: "" ,
     pr_graduationyear_txt: "",
-    pr_noticeperiod: undefined ,
-    pr_salary: undefined,
+    pr_noticeperiod: "" ,
+    pr_salary: "",
     pr_potentialjob: JobId,
    
   });
 
   async function handleSubmit() {
-
+    setloader(true)
     const formData = new FormData();
-    formData.append('file', currentFile as File);
+    formData.append('file', currentFile as File || '');
     formData.append('firstname', applicant.firstname as string);
     formData.append('lastname', applicant.lastname as string);
     formData.append('emailaddress1', applicant.emailaddress1 as string);
@@ -76,7 +77,10 @@ export default function Application() {
     formData.append('pr_potentialjob@odata.bind', `/entities(${JobId})` as string);
    
     try {
-      await restService.createCandidte(formData).then(() =>  navigate("/Submission"));
+     return await restService.createCandidte(formData).then(() =>  {
+       return  navigate("/Submission")
+        
+      });
     } catch (error) {
       console.log(error);
     }
@@ -104,8 +108,6 @@ export default function Application() {
 
   const handleResume = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
-    console.log(selectedFiles);
-
     if (!selectedFiles || selectedFiles.length === 0) {
       console.error("No files selected");
       return;
@@ -135,6 +137,7 @@ export default function Application() {
             type="text"
             value={applicant.firstname || ""}
             onChange={(event) => handleChange(event, "firstname")}
+            error={applicant.firstname === "" ? true : false}
           />
           <Field
             required={true}
@@ -142,6 +145,7 @@ export default function Application() {
             type="text"
             value={applicant.lastname || ""}
             onChange={(event) => handleChange(event, "lastname")}
+            error={applicant.lastname === "" ? true : false}
           />
           <Field
             required={true}
@@ -149,6 +153,7 @@ export default function Application() {
             type="date"
             value={applicant.birthdate || ""}
             onChange={(event) => handleChange(event, "birthdate")}
+            error={applicant.birthdate === "" ? true : false}
           />
           <Options
             variant="outlined"
@@ -166,7 +171,6 @@ export default function Application() {
             onChange={(event) => handleTelNumber(event)}
           />
           <Field
-            required={false}
             label="Email"
             type="email"
             value={applicant.emailaddress1 || ""}
@@ -175,28 +179,28 @@ export default function Application() {
         </GroupField>
         <GroupField label="Address Information">
           <Field
-            required={false}
+
             label="Street"
             type="text"
             value={applicant.address1_line1 || ""}
             onChange={(event) => handleChange(event, "address1_line1")}
           />
           <Field
-            required={false}
+
             label="ZIP"
             type="number"
             value={applicant.address1_postalcode || ""}
             onChange={(event) => handleChange(event, "address1_postalcode")}
           />
           <Field
-            required={false}
+
             label="City"
             type="text"
             value={applicant.address1_city || ""}
             onChange={(event) => handleChange(event, "address1_city")}
           />
           <Field
-            required={false}
+
             label="Country"
             type="text"
             value={applicant.address1_country || ""}
@@ -215,7 +219,7 @@ export default function Application() {
             onChange={(event) => handleChange(event, "pr_edu")}
           />
           <Field
-            required={false}
+
             label="graduation year"
             type="number"
             value={applicant.pr_graduationyear_txt || ""}
@@ -234,14 +238,13 @@ export default function Application() {
             onChange={(event) => handleChange(event, "pr_noticeperiod")}
           />
           <Field
-            required={false}
+
             label="Salary Expection"
             type="number"
             value={applicant.pr_salary || ""}
             onChange={(event) => handleChange(event, "pr_salary")}
           />
         </GroupField>
-
         <GroupField label=" Additional Information">
           <Upload
             label={"Other Files"}
@@ -293,13 +296,17 @@ export default function Application() {
         <GroupField label={""}>
           <div className="flex justify-center items-center  min-w-full text-base">
             <Button
+              disabled={currentFile === null ? true :false}
               color="success"
-              className="w-2/4 h-14 text-base"
+              className="w-2/4 h-14 text-base text-center flex items-center justify-center"
               variant="contained"
               type="button"
               onClick={handleSubmit}
             >
-              Submit
+             <h6 className="text-base min-w-[93%] translate-x-[7%]">Submit</h6> 
+             <div className="min-w-[7%] flex items-center justify-center h-[18px] pt-[2px]">
+              {loader && <CircularProgress thickness={6} color="inherit" size={18} disableShrink={true}/>}
+              </div>
             </Button>
           </div>
         </GroupField>

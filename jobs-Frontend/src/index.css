@@ -27,34 +27,22 @@ input[type="file"] {
   display: none;
   width: 100%;
   height: 100%;
-  border: unset !important;
-  outline: unset !important;
 }
-input[type="file"]:focus {
-  border: unset !important;
-  outline: unset !important;
-}
+
 input[type="date"] {
   color: transparent !important;
 }
 
-input[type="date"]:focus {
+ input[type="date"]:focus {
   color: black !important;
 }
 
 input[type="date"]:valid {
   color: black !important;
-}
+} 
 
 #workModelHous,
 #LocationId{
   background-color: unset !important;
 }
 
-/* input[type="date"]::selection {
-  color: "black";
-} */
-
-/* input[type="date"]::before {
-  color: black !important;
-} */

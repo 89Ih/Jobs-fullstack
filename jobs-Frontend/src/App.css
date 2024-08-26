@@ -80,9 +80,10 @@ section {
     font-size:  26px ;
     line-height: 15px ;
 }
-  .p-16{
-    padding: 50px;
-  }
+.text-8xl {
+  font-size: 80px;
+
+}
   
 }
 @media screen and (max-width: 700px) {
@@ -109,12 +110,16 @@ section {
 
   }
   .text-2xl {
-    font-size:18px;
+    font-size:18px !important;
 
   }
   .text-3xl {
     font-size:  18px ;
    
+}
+.text-8xl {
+  font-size: 50px;
+
 }
   .p-16{
     padding: 30px !important;
@@ -137,12 +142,16 @@ section {
  
   }
   .text-2xl {
-    font-size:18px;
+    font-size:18px !important;
     line-height: 28px;
   }
   .text-3xl {
     font-size:  14px ;
   
+}
+.text-8xl {
+  font-size: 30px;
+
 }
   .p-16{
     padding: 24px;

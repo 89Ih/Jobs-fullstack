@@ -30,12 +30,18 @@ interface IGroupField {
   label: string;
   children: ReactNode;
 }
+/** 
+* 
+* 
+*/
 interface IField {
   label: string;
   type: string;
   value:string | number;
-  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement >) => void,
-  required:boolean
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement >) => void;
+  required?:boolean;
+  error?:boolean;
+  className?:string| null
   
 }
 const ApplyForm: FC<IForm> & { GroupField: FC<IGroupField> & { Field: FC<IField> } } = ({ children,label,onSubmit }:IForm) => {
@@ -61,7 +67,7 @@ const GroupField: FC<IGroupField> = ({ label, children }) => {
     </fieldset>
   );
 };
-const Field: FC<IField> = ({ label, type,value,onChange, required }) => {
+const Field: FC<IField> = ({ label, type,value,onChange, required,error,className}) => {
   return (
     <TextField
       label={label}
@@ -71,7 +77,8 @@ const Field: FC<IField> = ({ label, type,value,onChange, required }) => {
       variant="outlined"
       fullWidth
       required={required}
-
+      error={error}
+      className={className || ''}
     />
   );
 };
