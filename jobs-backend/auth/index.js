@@ -109,9 +109,6 @@ class AuthMSAL {
     const sharePointAccessToken = await this.getAccessToken(GRAPH_SCOPE_URL);
 
     const file = fileParam.file;
-    if (!fileParam) {
-      return res.status(400).send("No file uploaded");
-    }
     const filePath = file[0].filepath;
     const firstname = fieldsParam.firstname[0];
     const lastname = fieldsParam.lastname[0];
