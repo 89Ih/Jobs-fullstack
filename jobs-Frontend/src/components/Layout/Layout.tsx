@@ -31,7 +31,7 @@ export const Layout = ({ children }: Props) => {
       <header
         className="top-0 sticky min-h-20 min-w-full shadow-gray-200 shadow-md bg-gray-50 flex flex-col justify-center z-10">
 
-        <div className="w-full inline-flex justify-between px-3 items-center">
+        <div className={`${matches ? ' px-[10px]':'px-4'} w-full inline-flex justify-between items-center`}>
           <Link onClick={() => window.scroll(0, 0)} to={'/'} className='text-2xl font-semibold'>
             <span className='text-slate-800 text-2xl'>Job</span>
             <span className='text-slate-500 text-2xl'>Seeker</span></Link>
