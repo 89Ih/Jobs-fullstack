@@ -76,7 +76,7 @@ const Jobs = () => {
               <input
                 id="ipt"
                 type="text"
-                className="text-base pl-2 pt-2 outline-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
+                className="text-base pl-2 pt-2 outline-none bg-none rounded-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
                 ref={inputRef}
                 onChange={removeFilter}
               // onKeyDown={({ key }) => key === 'Enter' && multiQuery()}
@@ -90,7 +90,7 @@ const Jobs = () => {
                 Work model
               </label>
               <select id="workModelHous" value={workModel} onChange={(event: any) => setWorkModel(event.target.value)}
-                className="outline-none border-b-2  focus:border-blue-500 border-transparent hover:border-black pt-2 text-base"
+                className="outline-none bg-none rounded-none border-b-2  focus:border-blue-500 border-transparent hover:border-black pt-2 text-base"
               >
                 <option className="text-base" value={""}></option>
                 <option className="text-base" value={10}>Fulltime</option>
@@ -104,7 +104,6 @@ const Jobs = () => {
               value={targetCity}
               onChange={(event) => setTargetCity(event.target.value)}
             />
-
           </div>
           <button
             className={` ${!matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mt-2"} 
@@ -119,7 +118,7 @@ const Jobs = () => {
         <div className="mt-10 w-full flex gap-2 ">
           {queries.length === 0 
 
-          ?  (<div className="flex flex-col gap-1 min-w-full" > <CardSkeleton cards={6} /></div>)
+          ?  (<div className="flex flex-col gap-1 min-w-full" > <CardSkeleton cards={10} /></div>)
           :  (<ul className={`flex flex-col gap-1 ${(!openUp) ? "min-w-full" : "w-1/4"}`}>
             {queries?.map((v) => {
               return (
