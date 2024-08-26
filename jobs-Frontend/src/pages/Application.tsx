@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Box, Button, Checkbox, SelectChangeEvent } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
-import ApplyForm from "../components/Parts/ApplyForm";
+import ApplyForm, { IApplicant } from "../components/Parts/ApplyForm";
 import Options from "../components/Parts/Options";
 import Countries from "../components/Parts/Countries";
 import restService from "../services/rest.service";
@@ -12,24 +12,7 @@ import Upload from "../components/Parts/Upload";
 const { GroupField } = ApplyForm;
 const { Field } = GroupField;
 
-interface IApplicant {
-  firstname?: string;
-  lastname?: string;
-  emailaddress1?: string;
-  address1_country?: string;
-  address1_line1?: string;
-  address1_city?: string;
-  address1_postalcode?: string;
-  familystatuscode?: number |any;
-  gendercode?: number |any ;
-  birthdate?: string;
-  pr_edu?: number |any ;
-  pr_graduationyear_txt?: string;
-  pr_noticeperiod?: number |any;
-  pr_salary?: number |any;
-  pr_potentialjob?: string | null;
 
-}
 export default function Application() {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
   const navigate = useNavigate();
@@ -170,7 +153,7 @@ export default function Application() {
           <Options
             variant="outlined"
             label={"Gender (optional)"}
-            value={applicant.gendercode}
+            value={applicant.gendercode || ""}
             property="genderVal"
             text="genderType"
             access={"opt-gender"}
@@ -223,7 +206,7 @@ export default function Application() {
         <GroupField label="Educational Background">
           <Options
             label={"Education level"}
-            value={applicant.pr_edu}
+            value={applicant.pr_edu || ""} 
             access={"Education-Level"}
             property={"value"}
             text={"level"}
@@ -242,7 +225,7 @@ export default function Application() {
         <GroupField label="Availability">
           <Options
             label={"Notice Period"}
-            value={applicant.pr_noticeperiod}
+            value={applicant.pr_noticeperiod || ""}
             access={"Notice-Period"}
             property={"Value"}
             text={"Period"}

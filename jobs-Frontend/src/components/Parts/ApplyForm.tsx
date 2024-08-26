@@ -1,6 +1,26 @@
 import { TextField } from "@mui/material";
 import { FC, ReactNode,Children, ChangeEvent } from "react";
 
+
+export interface IApplicant {
+  firstname?: string;
+  lastname?: string;
+  emailaddress1?: string;
+  address1_country?: string;
+  address1_line1?: string;
+  address1_city?: string;
+  address1_postalcode?: string;
+  familystatuscode?: string;
+  gendercode?: string ;
+  birthdate?: string;
+  pr_edu?:string;
+  pr_graduationyear_txt?: string;
+  pr_noticeperiod?: string;
+  pr_salary?: string;
+  pr_potentialjob?: string;
+
+}
+
 interface IForm {
   label: string;
   children: ReactNode;

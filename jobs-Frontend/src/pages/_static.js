@@ -6,9 +6,8 @@ export const Icons = {
 };
 
 export const GenderData = [
-  { genderId: "S00", genderType: "", genderVal: '' },
-  { genderId: "M01", genderType: "Male", genderVal: 1 },
-  { genderId: "F02", genderType: "Female", genderVal: 2 },
+  { genderId: "M01", genderType: "Male", genderVal: "1" },
+  { genderId: "F02", genderType: "Female", genderVal:" 2" },
 
 ];
 
@@ -42,45 +41,45 @@ export const LocationData = [
   }
 ]
 export const eduData = [
-  {"value": 125620000, "level": "High School Diploma"},
-  {"value": 125620001, "level": "Associate's Degree"},
-  {"value": 125620002, "level": "Bachelor's Degree"},
-  {"value": 125620003, "level": "Master's Degree"},
-  {"value": 125620004, "level": "Doctorate (Ph.D.)"},
-  {"value": 125620005, "level": "Professional Degrees (e.g., MD, JD)"}
+  {"value": "125620000", "level": "High School Diploma"},
+  {"value": "125620001", "level": "Associate's Degree"},
+  {"value": "125620002", "level": "Bachelor's Degree"},
+  {"value": "125620003", "level": "Master's Degree"},
+  {"value": "125620004", "level": "Doctorate (Ph.D.)"},
+  {"value": "125620005", "level": "Professional Degrees (e.g., MD, JD)"}
 ]
 export const noticePeriodData = [
   {
       "Period": "Immediate",
-      "Value": 125620006
+      "Value": "125620006"
   },
   {
       "Period": "1 Week",
-      "Value": 125620007
+      "Value": "125620007"
   },
   {
       "Period": "2 Weeks",
-      "Value": 125620008
+      "Value": "125620008"
   },
   {
       "Period": "4 Weeks",
-      "Value": 125620009
+      "Value": "125620009"
   },
   {
       "Period": "6 Weeks",
-      "Value": 125620010
+      "Value": "125620010"
   },
   {
       "Period": "8 Weeks",
-      "Value": 125620011
+      "Value": "125620011"
   },
   {
       "Period": "12 Weeks",
-      "Value": 125620012
+      "Value": "125620012"
   },
   {
       "Period": "Negotiable",
-      "Value": 125620013
+      "Value": "125620013"
   }
 ]
 

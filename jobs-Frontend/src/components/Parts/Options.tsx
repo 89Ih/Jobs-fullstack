@@ -3,7 +3,7 @@
 import {InputLabel,Select,MenuItem,FormControl} from "@mui/material";
 interface IOptions {
   label:string; 
-  value: number | undefined;
+  value: string;
   access:string;
   property:string;
   text:string;
