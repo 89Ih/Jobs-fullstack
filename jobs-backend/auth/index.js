@@ -113,7 +113,10 @@ class AuthMSAL {
     const lastname = fieldsParam.lastname[0];
     const fullname = firstname + " " + lastname + "_" + contactId;
     const originalFilename = file[0].originalFilename;
-   
+    console.log(filePath);
+    console.log(originalFilename);
+    
+    
     try {
       const URL_UPLOAD_TO_SHAREPOINT = `https://graph.microsoft.com/v1.0/drives/${SHARPOINT_DRIVE_ID}/root:/${fullname}/${originalFilename}:/content`;
       const fileBuffer = fs.readFileSync(filePath);

@@ -17,6 +17,7 @@ const NotFound: React.FC = () => {
         >
           Go Home
         </button>
+   
       </div>
     </div>
   );
