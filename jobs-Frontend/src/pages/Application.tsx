@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { Box, Button, Checkbox, CircularProgress, SelectChangeEvent } from "@mui/material";
+import { ChangeEvent,useCallback, useEffect, useRef, useState } from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  SelectChangeEvent,
+} from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 import { useNavigate, useParams } from "react-router-dom";
 import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
 import ApplyForm, { IApplicant } from "../components/Parts/ApplyForm";
@@ -11,18 +18,33 @@ import Upload from "../components/Parts/Upload";
 
 const { GroupField } = ApplyForm;
 const { Field } = GroupField;
-
-
+interface IUpload {
+  fileName: string;
+  fileType: string;
+  profileName: string;
+  profileUrl: string
+}
 export default function Application() {
-  const paragraphRef = useRef<HTMLParagraphElement>(null);
-  const [loader, setloader] = useState<boolean>(false);
   const navigate = useNavigate();
   const JobId: string | undefined = useParams().id;
+  const paragraphRef = useRef<HTMLParagraphElement>(null);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const JobTitle = urlParams.get("titl");
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState<{countryCode: string | undefined | null;tel: string;}>({
+  const [currentFile, setCurrentFile] = useState<File | string>("");
+  const [imageFile, setImageFile] = useState<File | string>("");
+  const [preview, setPreview] = useState<IUpload>({
+    fileName: "",
+    fileType: "",
+    profileName: "",
+    profileUrl: "",
+  });
+
+  const [loader, setloader] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState<{
+    countryCode: string | undefined | null;
+    tel: string;
+  }>({
     countryCode: "",
     tel: "",
   });
@@ -36,7 +58,6 @@ export default function Application() {
     },
     [paragraphRef]
   );
-
   const [applicant, setApplicant] = useState<IApplicant>({
     firstname: "",
     lastname: "",
@@ -46,52 +67,61 @@ export default function Application() {
     address1_city: "",
     address1_postalcode: "",
     familystatuscode: "",
-    gendercode: "" ,
-    birthdate:"",
-    pr_edu: "" ,
+    gendercode: "",
+    birthdate: "",
+    pr_edu: "",
     pr_graduationyear_txt: "",
-    pr_noticeperiod: "" ,
+    pr_noticeperiod: "",
     pr_salary: "",
     pr_potentialjob: JobId,
-   
   });
-
   async function handleSubmit() {
-    setloader(true)
+    setloader(true);
     const formData = new FormData();
-    formData.append('file', currentFile as File || '');
-    formData.append('firstname', applicant.firstname as string);
-    formData.append('lastname', applicant.lastname as string);
-    formData.append('emailaddress1', applicant.emailaddress1 as string);
-    formData.append('mobilephone', phoneNumber.countryCode + phoneNumber.tel as string);
-    formData.append('address1_city', applicant.address1_city as string);
-    formData.append('address1_country', applicant.address1_country as string);
-    formData.append('address1_line1', applicant.address1_line1 as string);
-    formData.append('address1_postalcode', applicant.address1_postalcode as string);
-    formData.append('gendercode', applicant.gendercode as any);
-    formData.append('birthdate', applicant.birthdate as string);
-    formData.append('pr_edu', applicant.pr_edu as any);
-    formData.append('pr_graduationyear_txt', applicant.pr_graduationyear_txt as string);
-    formData.append('pr_noticeperiod', applicant.pr_noticeperiod as any);
-    formData.append('pr_salary', applicant.pr_salary as any);
-    formData.append('pr_potentialjob@odata.bind', `/entities(${JobId})` as string);
-   
+    formData.append("file", (currentFile as File) || "");
+    formData.append("profile", (imageFile as File) || "");
+    formData.append("firstname", applicant.firstname as string);
+    formData.append("lastname", applicant.lastname as string);
+    formData.append("emailaddress1", applicant.emailaddress1 as string);
+    formData.append(
+      "mobilephone",
+      (phoneNumber.countryCode + phoneNumber.tel) as string
+    );
+    formData.append("address1_city", applicant.address1_city as string);
+    formData.append("address1_country", applicant.address1_country as string);
+    formData.append("address1_line1", applicant.address1_line1 as string);
+    formData.append(
+      "address1_postalcode",
+      applicant.address1_postalcode as string
+    );
+    formData.append("gendercode", applicant.gendercode as any);
+    formData.append("birthdate", applicant.birthdate as string);
+    formData.append("pr_edu", applicant.pr_edu as any);
+    formData.append(
+      "pr_graduationyear_txt",
+      applicant.pr_graduationyear_txt as string
+    );
+    formData.append("pr_noticeperiod", applicant.pr_noticeperiod as any);
+    formData.append("pr_salary", applicant.pr_salary as any);
+    formData.append(
+      "pr_potentialjob@odata.bind",
+      `/entities(${JobId})` as string
+    );
+
     try {
-     return await restService.createCandidte(formData).then(() =>  {
-       return  navigate("/Submission")
-        
+      return await restService.createCandidte(formData).then(() => {
+        return navigate("/Submission");
       });
     } catch (error) {
       console.log(error);
     }
   }
-
   const handleChange = useCallback(
     (
       event:
         | ChangeEvent<
-            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-          >
+          HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
         | SelectChangeEvent,
       field: keyof IApplicant
     ) => {
@@ -100,12 +130,19 @@ export default function Application() {
     },
     [applicant]
   );
-  
-  const [fileName, setFileName] = useState<{
-    type: string;
-    fileName: string;
-  }>();
-
+  const handleProfileImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files as FileList;
+    if (!selectedFiles || selectedFiles.length === 0) {
+      console.error("No files selected");
+      return;
+    }
+    setImageFile(selectedFiles[0]);
+    setPreview({
+      ...preview,
+      profileName: selectedFiles[0].name,
+      profileUrl: URL.createObjectURL(selectedFiles[0]) as any,
+    });
+  };
   const handleResume = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files as FileList;
     if (!selectedFiles || selectedFiles.length === 0) {
@@ -121,12 +158,30 @@ export default function Application() {
 
     validTypes.forEach((validType) => {
       if (validType === type) {
-        setFileName({ type, fileName: name });
+        setPreview({ ...preview, fileName: name, fileType: type })
       }
     });
   };
+  const removeFilesOnUI = useCallback((field: keyof IUpload) => {
+    if (field === 'fileName' || field === 'fileType') {
+      setPreview({ ...preview, fileName: "", fileType: "" })
+      setCurrentFile('')
+    }
+    else {
+      setPreview({ ...preview, profileName: "", profileUrl: "" })
+      setImageFile('')
+    }
+  }, [preview])
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [applicant, paragraphRef, phoneNumber,currentFile]);
+  useEffect(() => { }, [
+    applicant,
+    paragraphRef,
+    phoneNumber,
+    currentFile,
+    preview,
+    imageFile
+  ]);
   return (
     <section className="w-full flex flex-col items-center h-full">
       <ApplyForm label={`${JobTitle}`} onSubmit={handleSubmit}>
@@ -179,28 +234,24 @@ export default function Application() {
         </GroupField>
         <GroupField label="Address Information">
           <Field
-
             label="Street"
             type="text"
             value={applicant.address1_line1 || ""}
             onChange={(event) => handleChange(event, "address1_line1")}
           />
           <Field
-
             label="ZIP"
             type="number"
             value={applicant.address1_postalcode || ""}
             onChange={(event) => handleChange(event, "address1_postalcode")}
           />
           <Field
-
             label="City"
             type="text"
             value={applicant.address1_city || ""}
             onChange={(event) => handleChange(event, "address1_city")}
           />
           <Field
-
             label="Country"
             type="text"
             value={applicant.address1_country || ""}
@@ -210,7 +261,7 @@ export default function Application() {
         <GroupField label="Educational Background">
           <Options
             label={"Education level"}
-            value={applicant.pr_edu || ""} 
+            value={applicant.pr_edu || ""}
             access={"Education-Level"}
             property={"value"}
             text={"level"}
@@ -219,7 +270,6 @@ export default function Application() {
             onChange={(event) => handleChange(event, "pr_edu")}
           />
           <Field
-
             label="graduation year"
             type="number"
             value={applicant.pr_graduationyear_txt || ""}
@@ -238,7 +288,6 @@ export default function Application() {
             onChange={(event) => handleChange(event, "pr_noticeperiod")}
           />
           <Field
-
             label="Salary Expection"
             type="number"
             value={applicant.pr_salary || ""}
@@ -247,42 +296,48 @@ export default function Application() {
         </GroupField>
         <GroupField label=" Additional Information">
           <Upload
-            label={"Other Files"}
+            label={"Photo"}
             htmlFor={"uploadOtherFiles"}
             name={"Upload-Other-Files"}
-            onChange={(event) => console.log(event.target.files)}
+            onChange={(e) => handleProfileImage(e)}
+            accept=".png, .jpg"
           />
           <Upload
             label={"Resume *"}
             htmlFor={"uploadResume"}
             name={"upload_Resume"}
+            accept=".pdf, .doc, .docx"
             onChange={(event) => handleResume(event)}
           />
         </GroupField>
-        <GroupField label={""}>
-          <div className="w-100 _fr _g7 mt-3 flex items-center gap-2">
-            {fileName?.type === "application/pdf" ? (
-              <Box
-                component="img"
-                alt="office-word-icon"
-                src={Icons.PDF}
-                height={30}
-                width={30}
-                loading="lazy"
-              />
-            ) : !fileName?.type ? (
-              ""
-            ) : (
-              <Box
-                component="img"
-                alt="office-word-icon"
-                src={Icons.word}
-                height={25}
-                width={25}
-                loading="lazy"
-              />
-            )}
-            {fileName?.fileName}
+        <GroupField label={`${preview.profileName !== "" || currentFile !== null ? "Preview files" : ""}`}>
+          <div className="flex flex-col gap-3 min-w-full">
+            {preview.profileName !== "" && <div
+              className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
+              <div className="flex items-center gap-2">
+
+                <Box component="img" loading="lazy" src={preview.profileUrl} alt="preview" height={30} width={30}
+                  className="object-contain" />
+                <span>{preview.profileName}</span>
+              </div>
+              <ClearIcon className="text-slate-500" onClick={() => removeFilesOnUI('profileName')} />
+            </div>
+            }
+            {preview.fileName !== "" && <div
+              className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
+              <div className="flex items-center gap-2">
+                {preview.fileType === "application/pdf" ? (
+                  <Box component="img" alt="office-word-icon" src={Icons.PDF} height={30} width={30} loading="lazy" />
+                ) : !preview.fileType ? (
+                  ""
+                ) : (
+                  <Box component="img" alt="office-word-icon" src={Icons.word} height={25} width={25} loading="lazy" />
+                )}
+                {preview.fileName}
+              </div>
+              <ClearIcon className="text-slate-500" onClick={() => removeFilesOnUI('fileName')} />
+            </div>
+            }
           </div>
         </GroupField>
         <GroupField label="Declarations and Agreement">
@@ -296,16 +351,23 @@ export default function Application() {
         <GroupField label={""}>
           <div className="flex justify-center items-center  min-w-full text-base">
             <Button
-              disabled={currentFile === null ? true :false}
+              disabled={currentFile === "" ? true : false}
               color="success"
               className="w-2/4 h-14 text-base text-center flex items-center justify-center"
               variant="contained"
               type="button"
               onClick={handleSubmit}
             >
-             <h6 className="text-base min-w-[93%] translate-x-[7%]">Submit</h6> 
-             <div className="min-w-[7%] flex items-center justify-center h-[18px] pt-[2px]">
-              {loader && <CircularProgress thickness={6} color="inherit" size={18} disableShrink={true}/>}
+              <h6 className="text-base min-w-[93%] translate-x-[7%]">Submit</h6>
+              <div className="min-w-[7%] flex items-center justify-center h-[18px] pt-[2px]">
+                {loader && (
+                  <CircularProgress
+                    thickness={6}
+                    color="inherit"
+                    size={18}
+                    disableShrink={true}
+                  />
+                )}
               </div>
             </Button>
           </div>

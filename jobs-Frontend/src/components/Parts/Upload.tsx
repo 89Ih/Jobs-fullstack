@@ -4,10 +4,11 @@ interface IUpload {
     label : string
     htmlFor:string
     name: string;
+    accept: string
     onChange: (event: ChangeEvent<HTMLInputElement>)=> void
 }
 
-const Upload: FC<IUpload> = ({label,htmlFor,name,onChange}) => {
+const Upload: FC<IUpload> = ({label,htmlFor,name,onChange,accept}) => {
     return (
       <div className="flex flex-col w-full">
       <div className="flex items-center gap-2 w-full">
@@ -23,7 +24,7 @@ const Upload: FC<IUpload> = ({label,htmlFor,name,onChange}) => {
             />
             {label}
           </label>
-          <input className="border-none focus:border-none" type="file" name={name} id={htmlFor} onChange={onChange}  accept=".pdf, .doc, .docx"/>
+          <input className="border-none focus:border-none" type="file" name={name} id={htmlFor} onChange={onChange}  accept={accept}/>
         </div>
       </div>
       </div>
