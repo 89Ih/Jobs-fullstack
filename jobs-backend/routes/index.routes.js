@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const { authMSAL } = require("../auth/index");
 const formidable = require("formidable");
-
+const fs = require("fs");
+const path = require('path');
 /* GET home page. */
 router.get("/", async function (req, res) {
   return res.status(200).json("Loading...");
@@ -27,6 +28,10 @@ router.get("/jobs", async (req, res) => {
 router.post("/application", async (req, res) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
+
+    const binaryImageData = fs.readFileSync(files.profile[0].filepath);
+    const base64ImageData = Buffer.from(binaryImageData).toString('base64');
+    
     const candidateData = {
       firstname: fields.firstname[0],
       lastname: fields.lastname[0],
@@ -43,7 +48,8 @@ router.post("/application", async (req, res) => {
       pr_noticeperiod: Number(fields.pr_noticeperiod[0]) || -1,
       pr_salary: Number(fields.pr_salary[0]) || null,
       "pr_potentialjob@odata.bind": fields["pr_potentialjob@odata.bind"][0],
-      pr_jobopportunity_set: 125620001
+      pr_jobopportunity_set: 125620001,
+      entityimage:base64ImageData
     };
 
 

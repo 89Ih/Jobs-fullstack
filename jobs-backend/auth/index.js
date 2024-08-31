@@ -83,10 +83,7 @@ class AuthMSAL {
     const obj = { data, contactId };
     return obj;
   }
-  /**
-   * @param {File} fileParam
-   * @param {string} contactId
-   */
+
   // async root() {
   //   const sharePointAccessToken = await this.getAccessToken(GRAPH_SCOPE_URL);
 
@@ -104,6 +101,12 @@ class AuthMSAL {
   //   const data = await response.json();
   //   console.log(data);
   // }
+    /**
+   * @param {File} fileParam
+   * @param {Object} fieldsParam
+   * @param {string} contactId
+   * 
+   */
   async sendFiles(fieldsParam, fileParam, contactId) {
     const sharePointAccessToken = await this.getAccessToken(GRAPH_SCOPE_URL);
 
@@ -113,10 +116,7 @@ class AuthMSAL {
     const lastname = fieldsParam.lastname[0];
     const fullname = firstname + " " + lastname + "_" + contactId;
     const originalFilename = file[0].originalFilename;
-    console.log(filePath);
-    console.log(originalFilename);
-    
-    
+   
     try {
       const URL_UPLOAD_TO_SHAREPOINT = `https://graph.microsoft.com/v1.0/drives/${SHARPOINT_DRIVE_ID}/root:/${fullname}/${originalFilename}:/content`;
       const fileBuffer = fs.readFileSync(filePath);
