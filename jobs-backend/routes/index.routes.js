@@ -28,9 +28,12 @@ router.get("/jobs", async (req, res) => {
 router.post("/application", async (req, res) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
-
-    const binaryImageData = fs.readFileSync(files.profile[0].filepath);
-    const base64ImageData = Buffer.from(binaryImageData).toString('base64');
+   var binaryImageData,base64ImageData;
+   
+    if (Object.keys(files).includes("profile")) {
+        binaryImageData = fs.readFileSync(files?.profile[0]?.filepath);
+        base64ImageData = Buffer.from(binaryImageData).toString('base64');
+    }
     
     const candidateData = {
       firstname: fields.firstname[0],
@@ -49,19 +52,16 @@ router.post("/application", async (req, res) => {
       pr_salary: Number(fields.pr_salary[0]) || null,
       "pr_potentialjob@odata.bind": fields["pr_potentialjob@odata.bind"][0],
       pr_jobopportunity_set: 125620001,
-      entityimage:base64ImageData
+      entityimage:base64ImageData || ""
     };
-
 
     return await authMSAL.createCandidate(candidateData).then((apiRes) => {
       const { data, contactId } = apiRes;
       res.status(201).json(data);
-      if (Object.keys(files).length === 0) {
-        return
-      }
-      if (contactId) {
+      if (Object.keys(files).includes('file') && contactId) {
         return authMSAL.sendFiles(fields, files, contactId)
       }
+      return
     });
   });
 });
