@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent,useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,7 @@ import {
   CircularProgress,
   SelectChangeEvent,
 } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate, useParams } from "react-router-dom";
 import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
 import ApplyForm, { IApplicant } from "../components/Parts/ApplyForm";
@@ -22,7 +22,7 @@ interface IUpload {
   fileName: string;
   fileType: string;
   profileName: string;
-  profileUrl: string
+  profileUrl: string;
 }
 export default function Application() {
   const navigate = useNavigate();
@@ -76,10 +76,11 @@ export default function Application() {
     pr_potentialjob: JobId,
   });
   async function handleSubmit() {
+
     setloader(true);
     const formData = new FormData();
-    formData.append("file", (currentFile as File) || "");
-    formData.append("profile", (imageFile as File) || "");
+    formData.append("file", (currentFile as File) || "")
+    formData.append("profile",( imageFile as File) || "")
     formData.append("firstname", applicant.firstname as string);
     formData.append("lastname", applicant.lastname as string);
     formData.append("emailaddress1", applicant.emailaddress1 as string);
@@ -120,8 +121,8 @@ export default function Application() {
     (
       event:
         | ChangeEvent<
-          HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-        >
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+          >
         | SelectChangeEvent,
       field: keyof IApplicant
     ) => {
@@ -158,29 +159,31 @@ export default function Application() {
 
     validTypes.forEach((validType) => {
       if (validType === type) {
-        setPreview({ ...preview, fileName: name, fileType: type })
+        setPreview({ ...preview, fileName: name, fileType: type });
       }
     });
   };
-  const removeFilesOnUI = useCallback((field: keyof IUpload) => {
-    if (field === 'fileName' || field === 'fileType') {
-      setPreview({ ...preview, fileName: "", fileType: "" })
-      setCurrentFile('')
-    }
-    else {
-      setPreview({ ...preview, profileName: "", profileUrl: "" })
-      setImageFile('')
-    }
-  }, [preview])
+  const removeFilesOnUI = useCallback(
+    (field: keyof IUpload) => {
+      if (field === "fileName" || field === "fileType") {
+        setPreview({ ...preview, fileName: "", fileType: "" });
+        setCurrentFile("");
+      } else {
+        setPreview({ ...preview, profileName: "", profileUrl: "" });
+        setImageFile("");
+      }
+    },
+    [preview]
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     applicant,
     paragraphRef,
     phoneNumber,
     currentFile,
     preview,
-    imageFile
+    imageFile,
   ]);
   return (
     <section className="w-full flex flex-col items-center h-full">
@@ -310,34 +313,66 @@ export default function Application() {
             onChange={(event) => handleResume(event)}
           />
         </GroupField>
-        <GroupField label={`${preview.profileName !== "" || currentFile !== null ? "Preview files" : ""}`}>
+        <GroupField
+          label={`${
+            preview.profileName !== "" || currentFile !== null
+              ? "Preview files"
+              : ""
+          }`}
+        >
           <div className="flex flex-col gap-3 min-w-full">
-            {preview.profileName !== "" && <div
-              className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
-              <div className="flex items-center gap-2">
-
-                <Box component="img" loading="lazy" src={preview.profileUrl} alt="preview" height={30} width={30}
-                  className="object-contain" />
-                <span>{preview.profileName}</span>
+            {preview.profileName !== "" && (
+              <div className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
+                <div className="flex items-center gap-2">
+                  <Box
+                    component="img"
+                    loading="lazy"
+                    src={preview.profileUrl}
+                    alt="preview"
+                    height={30}
+                    width={30}
+                    className="object-contain"
+                  />
+                  <span>{preview.profileName}</span>
+                </div>
+                <ClearIcon
+                  className="text-slate-500"
+                  onClick={() => removeFilesOnUI("profileName")}
+                />
               </div>
-              <ClearIcon className="text-slate-500" onClick={() => removeFilesOnUI('profileName')} />
-            </div>
-            }
-            {preview.fileName !== "" && <div
-              className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
-              <div className="flex items-center gap-2">
-                {preview.fileType === "application/pdf" ? (
-                  <Box component="img" alt="office-word-icon" src={Icons.PDF} height={30} width={30} loading="lazy" />
-                ) : !preview.fileType ? (
-                  ""
-                ) : (
-                  <Box component="img" alt="office-word-icon" src={Icons.word} height={25} width={25} loading="lazy" />
-                )}
-                {preview.fileName}
+            )}
+            {preview.fileName !== "" && (
+              <div className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
+                <div className="flex items-center gap-2">
+                  {preview.fileType === "application/pdf" ? (
+                    <Box
+                      component="img"
+                      alt="office-word-icon"
+                      src={Icons.PDF}
+                      height={30}
+                      width={30}
+                      loading="lazy"
+                    />
+                  ) : !preview.fileType ? (
+                    ""
+                  ) : (
+                    <Box
+                      component="img"
+                      alt="office-word-icon"
+                      src={Icons.word}
+                      height={25}
+                      width={25}
+                      loading="lazy"
+                    />
+                  )}
+                  {preview.fileName}
+                </div>
+                <ClearIcon
+                  className="text-slate-500"
+                  onClick={() => removeFilesOnUI("fileName")}
+                />
               </div>
-              <ClearIcon className="text-slate-500" onClick={() => removeFilesOnUI('fileName')} />
-            </div>
-            }
+            )}
           </div>
         </GroupField>
         <GroupField label="Declarations and Agreement">

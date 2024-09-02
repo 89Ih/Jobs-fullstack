@@ -157,3 +157,7 @@ section {
     padding: 24px;
   }
 }
+
+._flex{
+  display: inline-flex !important;
+}
