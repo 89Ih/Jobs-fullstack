@@ -68,10 +68,10 @@ const Countries: FC<ICountries> = ({paragraphRef,value,onChange}) => {
             </div>
           )}
           <div className="w-11/12 flex items-center h-14">
-        
+       
             <input
               type="number"
-              className="w-full border-none outline-none"
+              className="w-full border-none outline-none _bgc-none"
               value={value}
               onChange={onChange}
             />

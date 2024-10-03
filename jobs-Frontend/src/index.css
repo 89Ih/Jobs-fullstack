@@ -3,7 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+._bgc-none {
+  background-color: unset !important;
+}
 body {
   height: 100vh;
 }

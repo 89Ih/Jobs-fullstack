@@ -29,7 +29,6 @@ router.post("/application", async (req, res) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
    var binaryImageData,base64ImageData;
-   
     if (Object.keys(files).includes("profile")) {
         binaryImageData = fs.readFileSync(files?.profile[0]?.filepath);
         base64ImageData = Buffer.from(binaryImageData).toString('base64');

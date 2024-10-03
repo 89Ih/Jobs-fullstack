@@ -83,7 +83,6 @@ class AuthMSAL {
     const obj = { data, contactId };
     return obj;
   }
-
   // async root() {
   //   const sharePointAccessToken = await this.getAccessToken(GRAPH_SCOPE_URL);
 
@@ -109,7 +108,6 @@ class AuthMSAL {
    */
   async sendFiles(fieldsParam, fileParam, contactId) {
     const sharePointAccessToken = await this.getAccessToken(GRAPH_SCOPE_URL);
-
     const file = fileParam.file;
     const filePath = file[0].filepath;
     const firstname = fieldsParam.firstname[0];

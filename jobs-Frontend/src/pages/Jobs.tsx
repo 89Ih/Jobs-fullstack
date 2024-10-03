@@ -64,7 +64,7 @@ const Jobs = () => {
     console.log(currentPage);
     
   }
- 
+
   useEffect(() => {
     if (matches) {
       setOpenUp(false);
@@ -86,9 +86,10 @@ const Jobs = () => {
                 Job-Title
               </label>
               <input
+           
                 id="ipt"
                 type="text"
-                className="text-base pl-2 pt-2 outline-none bg-none rounded-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
+                className="text-base pl-2 pt-2 _bgc-none outline-none bg-none rounded-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
                 ref={inputRef}
                 onChange={removeFilter}
                 // onKeyDown={({ key }) => key === 'Enter' && multiQuery()}
