@@ -51,7 +51,6 @@ const Countries: FC<ICountries> = ({paragraphRef,value,onChange}) => {
             <div className="inline-flex items-center justify-center gap-1 ">
               <Tooltip title="Change country code" className="inline-flex items-center justify-center ">
                 <img
-                  
                   width={22}
                   height={20}
                   alt="counties"
