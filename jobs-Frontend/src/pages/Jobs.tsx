@@ -6,6 +6,8 @@ import restService from "../services/rest.service";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { JobDetails } from "../components/Parts/JobDetails";
 import CardSkeleton from "../components/Parts/CardSkeleton";
+import Pagination from '@mui/material/Pagination';
+
 const Jobs = () => {
   const matches = useMediaQuery("(max-width:700px)");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -15,8 +17,14 @@ const Jobs = () => {
   const [items, setItems] = useState<any[]>([]);
   const [targetCity, setTargetCity] = useState<string>("");
   const [workModel, setWorkModel] = useState<number>();
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [jobsPerPage, setJobsPerPage] = useState<number>(8);
+  const lastPageIndex = currentPage * jobsPerPage;
+  const firstPageIndex = lastPageIndex - jobsPerPage;
+  const currentJobs = queries.slice(firstPageIndex,lastPageIndex);
   const navigate = useNavigate();
+
   const fetchJobDetails = (id: string) => {
     setOpenUp(true);
     const filterById = queries.filter(({ pr_jobid }) => pr_jobid === id);
@@ -52,7 +60,11 @@ const Jobs = () => {
     }
     return fetchJobDetails(ID);
   }
-
+  const handleChange = (e:any)=> {setCurrentPage(e.target.textContent)
+    console.log(currentPage);
+    
+  }
+ 
   useEffect(() => {
     if (matches) {
       setOpenUp(false);
@@ -129,12 +141,8 @@ const Jobs = () => {
               <CardSkeleton cards={10} />
             </div>
           ) : (
-            <ul
-              className={`flex flex-col gap-1 ${
-                !openUp ? "min-w-full" : "w-1/4"
-              }`}
-            >
-              {queries?.map((v) => {
+            <ul className={`flex flex-col gap-1 ${!openUp ? "min-w-full" : "w-1/4"}`}>
+              {currentJobs?.map((v) => {
                 return (
                   <li
                     key={v.pr_jobid}
@@ -164,6 +172,15 @@ const Jobs = () => {
             />
           )}
         </div>
+       <div className=" mt-10 flex items-end justify-center">
+        <Pagination 
+          count={Math.ceil(queries.length/jobsPerPage) } 
+          variant="outlined" 
+          color="primary"  
+          onClick={handleChange}
+          
+          />
+       </div>
       </section>
     </>
   );

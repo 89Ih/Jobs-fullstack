@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, ChangeEvent,FC, RefObject } from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
@@ -22,6 +23,7 @@ const Countries: FC<ICountries> = ({paragraphRef,value,onChange}) => {
 
   const handleSelectedCountry = (
     event: ChangeEvent<HTMLSelectElement>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     index: number
   ) => {
     setSelectCountry({
@@ -42,7 +44,7 @@ const Countries: FC<ICountries> = ({paragraphRef,value,onChange}) => {
   return (
     <div className="flex flex-col w-full ">
       {!show ? (
-        <div className="flex items-center gap-1 w-full border-gray-300  rounded-md px-3 border border-solid hover:border-black ">
+        <div className="flex items-center gap-1 w-full border-gray-300 rounded-md px-3 border border-solid hover:border-black ">
           { counties.length === 0 ?  (
             <CircularProgress  value={75} />
           ) : (

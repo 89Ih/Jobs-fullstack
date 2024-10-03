@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import {
-  Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  SelectChangeEvent,
+Box,
+Button,
+Checkbox,
+CircularProgress,
+SelectChangeEvent,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate, useParams } from "react-router-dom";
@@ -76,7 +76,6 @@ export default function Application() {
     pr_potentialjob: JobId,
   });
   async function handleSubmit() {
-
     setloader(true);
     const formData = new FormData();
     formData.append("file", (currentFile as File) || "")
@@ -84,30 +83,18 @@ export default function Application() {
     formData.append("firstname", applicant.firstname as string);
     formData.append("lastname", applicant.lastname as string);
     formData.append("emailaddress1", applicant.emailaddress1 as string);
-    formData.append(
-      "mobilephone",
-      (phoneNumber.countryCode + phoneNumber.tel) as string
-    );
+    formData.append("mobilephone",(phoneNumber.countryCode + phoneNumber.tel) as string);
     formData.append("address1_city", applicant.address1_city as string);
     formData.append("address1_country", applicant.address1_country as string);
     formData.append("address1_line1", applicant.address1_line1 as string);
-    formData.append(
-      "address1_postalcode",
-      applicant.address1_postalcode as string
-    );
+    formData.append("address1_postalcode",applicant.address1_postalcode as string);
     formData.append("gendercode", applicant.gendercode as any);
     formData.append("birthdate", applicant.birthdate as string);
     formData.append("pr_edu", applicant.pr_edu as any);
-    formData.append(
-      "pr_graduationyear_txt",
-      applicant.pr_graduationyear_txt as string
-    );
+    formData.append("pr_graduationyear_txt",applicant.pr_graduationyear_txt as string);
     formData.append("pr_noticeperiod", applicant.pr_noticeperiod as any);
     formData.append("pr_salary", applicant.pr_salary as any);
-    formData.append(
-      "pr_potentialjob@odata.bind",
-      `/entities(${JobId})` as string
-    );
+    formData.append("pr_potentialjob@odata.bind",`/entities(${JobId})` as string);
 
     try {
       return await restService.createCandidte(formData).then(() => {
