@@ -60,9 +60,10 @@ const Jobs = () => {
     }
     return fetchJobDetails(ID);
   }
-  const handleChange = (e:any)=> {setCurrentPage(e.target.textContent)
-    console.log(currentPage);
-    
+  const handleChange = (e:any)=> {
+    setOpenUp(false)
+    setCurrentPage(e.target.textContent)
+
   }
 
   useEffect(() => {
