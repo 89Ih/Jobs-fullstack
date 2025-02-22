@@ -17,12 +17,12 @@ const Jobs = () => {
   const [items, setItems] = useState<any[]>([]);
   const [targetCity, setTargetCity] = useState<string>("");
   const [workModel, setWorkModel] = useState<number>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [jobsPerPage, setJobsPerPage] = useState<number>(8);
-  const lastPageIndex = currentPage * jobsPerPage;
-  const firstPageIndex = lastPageIndex - jobsPerPage;
-  const currentJobs = queries?.slice(firstPageIndex,lastPageIndex);
+  // const lastPageIndex = currentPage * jobsPerPage;
+  // const firstPageIndex = lastPageIndex - jobsPerPage;
+  // const currentJobs = queries?.slice(firstPageIndex, lastPageIndex);
   const navigate = useNavigate();
 
   const fetchJobDetails = (id: string) => {
@@ -54,13 +54,14 @@ const Jobs = () => {
     }
     return setQueries(queries);
   }, [inputRef, queries, items]);
+
   function navToJobDeatils(ID: string) {
     if (matches) {
       return navigate(`/Job-details/${ID}`);
     }
     return fetchJobDetails(ID);
   }
-  const handleChange = (e:any)=> {
+  const handleChange = (e: any) => {
     setOpenUp(false)
     setCurrentPage(e.target.textContent)
 
@@ -87,13 +88,13 @@ const Jobs = () => {
                 Job-Title
               </label>
               <input
-           
+
                 id="ipt"
                 type="text"
                 className="text-base pl-2 pt-2 _bgc-none outline-none bg-none rounded-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
                 ref={inputRef}
                 onChange={removeFilter}
-                // onKeyDown={({ key }) => key === 'Enter' && multiQuery()}
+              // onKeyDown={({ key }) => key === 'Enter' && multiQuery()}
               />
             </div>
           </div>
@@ -144,7 +145,7 @@ const Jobs = () => {
             </div>
           ) : (
             <ul className={`flex flex-col gap-1 ${!openUp ? "min-w-full" : "w-1/4"}`}>
-              {currentJobs?.map((v) => {
+              {queries?.map((v) => {
                 return (
                   <li
                     key={v.pr_jobid}
@@ -174,15 +175,15 @@ const Jobs = () => {
             />
           )}
         </div>
-       <div className=" mt-10 flex items-end justify-center">
-        <Pagination 
-          count={Math.ceil(queries.length/jobsPerPage) } 
-          variant="outlined" 
-          color="primary"  
-          onClick={handleChange}
-          
+        <div className=" mt-10 flex items-end justify-center">
+        <Pagination
+            count={Math.ceil(queries.length / jobsPerPage)}
+            variant="outlined"
+            color="primary"
+            onClick={handleChange}
+
           />
-       </div>
+        </div>
       </section>
     </>
   );
