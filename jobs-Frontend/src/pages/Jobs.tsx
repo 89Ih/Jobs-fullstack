@@ -138,7 +138,7 @@ const Jobs = () => {
           </button>
         </form>
         <div className={`w-full flex gap-2 ${matches ? "mt-3" : " mt-10"}`}>
-          {queries.length === 0 ? (
+          {queries?.length === 0 ? (
             <div className="flex flex-col gap-1 min-w-full">
               {" "}
               <CardSkeleton cards={10} />
