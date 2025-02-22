@@ -176,13 +176,13 @@ const Jobs = () => {
           )}
         </div>
         <div className=" mt-10 flex items-end justify-center">
-        <Pagination
+        {/* <Pagination
             count={Math.ceil(queries.length / jobsPerPage)}
             variant="outlined"
             color="primary"
             onClick={handleChange}
 
-          />
+          /> */}
         </div>
       </section>
     </>
