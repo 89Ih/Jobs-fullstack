@@ -22,7 +22,7 @@ const Jobs = () => {
   const [jobsPerPage, setJobsPerPage] = useState<number>(8);
   const lastPageIndex = currentPage * jobsPerPage;
   const firstPageIndex = lastPageIndex - jobsPerPage;
-  const currentJobs = queries.slice(firstPageIndex,lastPageIndex);
+  const currentJobs = queries?.slice(firstPageIndex,lastPageIndex);
   const navigate = useNavigate();
 
   const fetchJobDetails = (id: string) => {
