@@ -17,11 +17,11 @@ const Jobs = () => {
   const [items, setItems] = useState<any[]>([]);
   const [targetCity, setTargetCity] = useState<string>("");
   const [workModel, setWorkModel] = useState<number>();
-  // const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [jobsPerPage, setJobsPerPage] = useState<number>(8);
-  // const lastPageIndex = currentPage * jobsPerPage;
-  // const firstPageIndex = lastPageIndex - jobsPerPage;
+  const lastPageIndex = currentPage * jobsPerPage;
+  const firstPageIndex = lastPageIndex - jobsPerPage;
   // const currentJobs = queries?.slice(firstPageIndex, lastPageIndex);
   const navigate = useNavigate();
 
