@@ -9,7 +9,7 @@ SelectChangeEvent,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate, useParams } from "react-router-dom";
-import { eduData, GenderData, Icons, noticePeriodData } from "./_static";
+import { eduData, GenderData, Icons,  noticePeriodData } from "./_static";
 import ApplyForm, { IApplicant } from "../components/Parts/ApplyForm";
 import Options from "../components/Parts/Options";
 import Countries from "../components/Parts/Countries";
@@ -20,7 +20,7 @@ const { GroupField } = ApplyForm;
 const { Field } = GroupField;
 interface IUpload {
   fileName: string;
-  fileType: string;
+  fileType: number;
   profileName: string;
   profileUrl: string;
 }
@@ -35,7 +35,7 @@ export default function Application() {
   const [imageFile, setImageFile] = useState<File | string>("");
   const [preview, setPreview] = useState<IUpload>({
     fileName: "",
-    fileType: "",
+    fileType: -1,
     profileName: "",
     profileUrl: "",
   });
@@ -138,7 +138,9 @@ export default function Application() {
       return;
     }
     const { name, type } = selectedFiles[0];
-    setCurrentFile(selectedFiles[0]);
+    console.log(type);
+    
+  
     const validTypes = [
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       "application/pdf",
@@ -146,21 +148,23 @@ export default function Application() {
 
     validTypes.forEach((validType) => {
       if (validType === type) {
-        setPreview({ ...preview, fileName: name, fileType: type });
+        setCurrentFile(selectedFiles[0]);
+        setPreview({ ...preview, fileName: name, fileType: (type.endsWith('f') ? 1 : 0) });
+ 
       }
     });
   };
   const removeFilesOnUI = useCallback(
     (field: keyof IUpload) => {
       if (field === "fileName" || field === "fileType") {
-        setPreview({ ...preview, fileName: "", fileType: "" });
+        setPreview({ ...preview, fileName: "", fileType: -1 });
         setCurrentFile("");
       } else {
         setPreview({ ...preview, profileName: "", profileUrl: "" });
         setImageFile("");
       }
     },
-    [preview]
+    [preview,currentFile, imageFile]
   );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -331,32 +335,10 @@ export default function Application() {
             {preview.fileName !== "" && (
               <div className="flex items-center justify-between min-w-100 bg-slate-100 p-2 shadow-md">
                 <div className="flex items-center gap-2">
-                  {preview.fileType === "application/pdf" ? (
-                    <Box
-                      component="img"
-                      alt="office-word-icon"
-                      src={Icons.PDF}
-                      height={30}
-                      width={30}
-                      loading="lazy"
-                    />
-                  ) : !preview.fileType ? (
-                    ""
-                  ) : (
-                    <Box
-                      component="img"
-                      alt="office-word-icon"
-                      src={Icons.word}
-                      height={25}
-                      width={25}
-                      loading="lazy"
-                    />
-                  )}
+                <Box component="img" alt="office-word-icon" src={Icons.URLS[preview.fileType]} height={30} width={30} loading="lazy" />
                   {preview.fileName}
                 </div>
-                <ClearIcon
-                  className="text-slate-500"
-                  onClick={() => removeFilesOnUI("fileName")}
+                <ClearIcon className="text-slate-500" onClick={() => removeFilesOnUI("fileName")}
                 />
               </div>
             )}
