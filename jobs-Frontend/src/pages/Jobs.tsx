@@ -19,10 +19,10 @@ const Jobs = () => {
   const [workModel, setWorkModel] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [jobsPerPage, setJobsPerPage] = useState<number>(8);
+  const [jobsPerPage] = useState<number>(8);
   const lastPageIndex = currentPage * jobsPerPage;
   const firstPageIndex = lastPageIndex - jobsPerPage;
-  // const currentJobs = queries?.slice(firstPageIndex, lastPageIndex);
+  const currentJobs = queries?.slice(firstPageIndex, lastPageIndex);
   const navigate = useNavigate();
 
   const fetchJobDetails = (id: string) => {
@@ -45,7 +45,7 @@ const Jobs = () => {
     if (tJob === "" || undefined) {
       return setQueries(items);
     }
-    if (tJob !== null || "") {
+    if (tJob !== null || tJob !== "") {
       return setQueries(
         queries.filter(({ pr_jobtitle }) =>
           pr_jobtitle.toLowerCase().includes(tJob?.toLowerCase())
@@ -64,14 +64,15 @@ const Jobs = () => {
   const handleChange = (e: any) => {
     setOpenUp(false)
     setCurrentPage(e.target.textContent)
-
-  }
+  };
 
   useEffect(() => {
     if (matches) {
       setOpenUp(false);
     }
     restService.fetchJobs().then((res) => {
+      console.log(res);
+      
       setItems(res);
       setQueries(res);
     });
@@ -176,13 +177,12 @@ const Jobs = () => {
           )}
         </div>
         <div className=" mt-10 flex items-end justify-center">
-        {/* <Pagination
-            count={Math.ceil(queries.length / jobsPerPage)}
+        <Pagination
+            count={Math.ceil(Number(queries?.length )/ jobsPerPage)}
             variant="outlined"
             color="primary"
             onClick={handleChange}
-
-          /> */}
+          />
         </div>
       </section>
     </>

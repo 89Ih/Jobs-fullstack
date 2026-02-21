@@ -14,7 +14,7 @@ const {
 
 class AuthMSAL {
   constructor() {
-    this.root()
+    this.root();
   }
   async getAccessToken(scope) {
     let DataverseaccessToken, tokenExpirationTime;
@@ -33,6 +33,8 @@ class AuthMSAL {
       );
 
       DataverseaccessToken = response.data.access_token;
+
+
       tokenExpirationTime = Date.now() + response.data.expires_in * 1000;
       return DataverseaccessToken;
     } catch (error) {
@@ -101,8 +103,9 @@ class AuthMSAL {
     });
     const data = await response.json();
 
-
     console.log(data);
+
+
   }
 
   /**

@@ -5,7 +5,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index.routes');
-const {PORT,ORIGIN} = process.env;
+const { PORT, ORIGIN } = process.env;
 const cors = require("cors");
 var app = express();
 
@@ -14,14 +14,14 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-      httpOnly: true,
-      secure: false, // set this to true on production
+    httpOnly: true,
+    secure: false, // set this to true on production
   }
 }));
 app.use(
   cors({
     origin: ORIGIN,
-    methods:["POST","GET","DELETE","PUT"],
+    methods: ["POST", "GET", "DELETE", "PUT"],
     credentials: true,
   })
 );
