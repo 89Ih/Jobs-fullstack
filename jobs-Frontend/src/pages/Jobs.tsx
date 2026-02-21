@@ -37,7 +37,7 @@ const Jobs = () => {
   const lastPageIndex = currentPage * jobsPerPage;
   const firstPageIndex = lastPageIndex - jobsPerPage;
 
-  const currentJobs = queries.slice(firstPageIndex, lastPageIndex);
+  const currentJobs = queries.length > 0 ? queries.slice(firstPageIndex, lastPageIndex) : [];
 
   /* ---------------- fetch jobs ---------------- */
 
@@ -196,7 +196,7 @@ const Jobs = () => {
             </div>
           ) : (
             <ul className={`flex flex-col gap-1 ${!openUp ? "min-w-full" : "w-1/4"}`}>
-              {currentJobs.map((v) => (
+              {currentJobs.length > 0 && currentJobs.map((v) => (
                 <li
                   key={v.pr_jobid}
                   onClick={() => navToJobDetails(v.pr_jobid)}
