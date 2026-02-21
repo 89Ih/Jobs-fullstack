@@ -6,182 +6,230 @@ import restService from "../services/rest.service";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { JobDetails } from "../components/Parts/JobDetails";
 import CardSkeleton from "../components/Parts/CardSkeleton";
-import Pagination from '@mui/material/Pagination';
+import Pagination from "@mui/material/Pagination";
+
+type Job = {
+  pr_jobid: string;
+  pr_jobtitle: string;
+  pr_title?: string;
+  pr_cities?: string;
+  pr_tasks_txt?: string;
+  pr_qualifications_txt?: string;
+};
 
 const Jobs = () => {
   const matches = useMediaQuery("(max-width:700px)");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [openUp, setOpenUp] = useState<boolean>(false);
-  const [filtered, setFiltered] = useState<any>({});
-  const [queries, setQueries] = useState<any[]>([]);
-  const [items, setItems] = useState<any[]>([]);
-  const [targetCity, setTargetCity] = useState<string>("");
-  const [workModel, setWorkModel] = useState<number>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [jobsPerPage] = useState<number>(8);
-  const lastPageIndex = currentPage * jobsPerPage;
-  const firstPageIndex = lastPageIndex - jobsPerPage;
-  const currentJobs = queries?.slice(firstPageIndex, lastPageIndex);
   const navigate = useNavigate();
 
-  const fetchJobDetails = (id: string) => {
-    setOpenUp(true);
-    const filterById = queries.filter(({ pr_jobid }) => pr_jobid === id);
-    setFiltered(filterById[0]);
-    return filtered;
-  };
-  function removeFilter() {
-    setOpenUp(false);
-    const tJob = inputRef.current?.value;
-    if (tJob === "" || undefined) {
-      return setQueries(items);
-    }
-    return setQueries(queries);
-  }
-  const multiQuery = useCallback(() => {
-    setOpenUp(false);
-    const tJob = inputRef.current?.value;
-    if (tJob === "" || undefined) {
-      return setQueries(items);
-    }
-    if (tJob !== null || tJob !== "") {
-      return setQueries(
-        queries.filter(({ pr_jobtitle }) =>
-          pr_jobtitle.toLowerCase().includes(tJob?.toLowerCase())
-        )
-      );
-    }
-    return setQueries(queries);
-  }, [inputRef, queries, items]);
+  const [openUp, setOpenUp] = useState(false);
+  const [filtered, setFiltered] = useState<Job | null>(null);
+  const [queries, setQueries] = useState<Job[]>([]);
+  const [items, setItems] = useState<Job[]>([]);
+  const [targetCity, setTargetCity] = useState("");
+  const [workModel, setWorkModel] = useState<number | "">("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  function navToJobDeatils(ID: string) {
-    if (matches) {
-      return navigate(`/Job-details/${ID}`);
-    }
-    return fetchJobDetails(ID);
-  }
-  const handleChange = (e: any) => {
-    setOpenUp(false)
-    setCurrentPage(e.target.textContent)
-  };
+  const jobsPerPage = 8;
+
+  /* ---------------- pagination ---------------- */
+
+  const lastPageIndex = currentPage * jobsPerPage;
+  const firstPageIndex = lastPageIndex - jobsPerPage;
+
+  const currentJobs = queries.slice(firstPageIndex, lastPageIndex);
+
+  /* ---------------- fetch jobs ---------------- */
 
   useEffect(() => {
-    if (matches) {
-      setOpenUp(false);
+    if (matches) setOpenUp(false);
+
+    restService
+      .fetchJobs()
+      .then((res: any) => {
+        const safe: Job[] = Array.isArray(res) ? res : [];
+        setItems(safe);
+        setQueries(safe);
+      })
+      .catch(() => {
+        setItems([]);
+        setQueries([]);
+      });
+  }, [matches]);
+
+  /* ---------------- job details ---------------- */
+
+  const fetchJobDetails = (id: string) => {
+    const job = queries.find((j) => j.pr_jobid === id) || null;
+    setFiltered(job);
+    setOpenUp(true);
+  };
+
+  /* ---------------- search ---------------- */
+
+  const removeFilter = () => {
+    setOpenUp(false);
+    const value = inputRef.current?.value?.trim();
+
+    if (!value) {
+      setQueries(items);
+      return;
     }
-    restService.fetchJobs().then((res) => {
-      console.log(res);
-      
-      setItems(res);
-      setQueries(res);
-    });
-  }, [filtered, matches]);
+  };
+
+  const multiQuery = useCallback(() => {
+    setOpenUp(false);
+
+    const text = inputRef.current?.value?.trim().toLowerCase();
+
+    let result = [...items];
+
+    if (text) {
+      result = result.filter((j) =>
+        j.pr_jobtitle?.toLowerCase().includes(text)
+      );
+    }
+
+    if (workModel !== "") {
+      result = result.filter((j: any) => j.workModel === workModel);
+    }
+
+    if (targetCity) {
+      result = result.filter((j) =>
+        j.pr_cities?.toLowerCase().includes(targetCity.toLowerCase())
+      );
+    }
+
+    setCurrentPage(1);
+    setQueries(result);
+  }, [items, workModel, targetCity]);
+
+  /* ---------------- navigation ---------------- */
+
+  function navToJobDetails(ID: string) {
+    if (matches) navigate(`/Job-details/${ID}`);
+    else fetchJobDetails(ID);
+  }
+
+  /* ---------------- pagination change ---------------- */
+
+  const handleChange = (_: any, value: number) => {
+    setCurrentPage(value);
+  };
+
+  /* ---------------- render ---------------- */
+
   return (
     <>
       <section className="_sub-header" />
+
       <section className={matches ? "mt-4" : "mt-10"}>
-        <form className={`flex items-center ${matches && "flex-wrap justify-between"} gap-3 w-full`}
+        {/* ---------------- filters ---------------- */}
+
+        <form
+          className={`flex items-center ${
+            matches && "flex-wrap justify-between"
+          } gap-3 w-full`}
         >
+          {/* title */}
           <div className={!matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mx-[3px]"}>
-            <div className=" flex flex-col border-b border-gray-400 hover:border-transparent">
-              <label htmlFor="ipt" className="text-[13px] text-gray-500 ">
+            <div className="flex flex-col border-b border-gray-400 hover:border-transparent">
+              <label htmlFor="ipt" className="text-[13px] text-gray-500">
                 Job-Title
               </label>
-              <input
 
+              <input
                 id="ipt"
                 type="text"
-                className="text-base pl-2 pt-2 _bgc-none outline-none bg-none rounded-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
                 ref={inputRef}
                 onChange={removeFilter}
-              // onKeyDown={({ key }) => key === 'Enter' && multiQuery()}
+                className="text-base pl-2 pt-2 outline-none border-b-2 focus:border-blue-500 border-transparent hover:border-black"
               />
             </div>
           </div>
+
+          {/* work model */}
           <div className={!matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mx-[3px]"}>
             <div className="flex flex-col border-b border-gray-400 hover:border-transparent">
-              <label
-                htmlFor="workModelHous"
-                className="text-[13px] text-gray-500"
-              >
-                Work model
-              </label>
+              <label className="text-[13px] text-gray-500">Work model</label>
+
               <select
-                id="workModelHous"
                 value={workModel}
-                onChange={(event: any) => setWorkModel(event.target.value)}
-                className="outline-none bg-none rounded-none border-b-2  focus:border-blue-500 border-transparent hover:border-black pt-2 text-base"
+                onChange={(e) =>
+                  setWorkModel(e.target.value === "" ? "" : Number(e.target.value))
+                }
+                className="outline-none border-b-2 focus:border-blue-500 border-transparent hover:border-black pt-2 text-base"
               >
-                <option className="text-base" value={""}></option>
-                <option className="text-base" value={10}>
-                  Fulltime
-                </option>
-                <option className="text-base" value={20}>
-                  Parttime
-                </option>
+                <option value=""></option>
+                <option value={10}>Fulltime</option>
+                <option value={20}>Parttime</option>
               </select>
             </div>
           </div>
-          <div className={!matches ? "w-2/4 h-[50px] " : "w-full h-[40px] mx-[3px] "}>
+
+          {/* city */}
+          <div className={!matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mx-[3px]"}>
             <OptGruop
               value={targetCity}
-              onChange={(event) => setTargetCity(event.target.value)}
+              onChange={(e: any) => setTargetCity(e.target.value)}
             />
           </div>
+
+          {/* search */}
           <button
-            className={`border-none rounded-md bg-sky-500 text-white font-semibold hover:bg-sky-400 text-base 
-              ${!matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mx-[3px] mt-2"}`}
-            onClick={multiQuery}
             type="button"
+            onClick={multiQuery}
+            className={`border-none rounded-md bg-sky-500 text-white font-semibold hover:bg-sky-400 text-base ${
+              !matches ? "w-2/4 h-[50px]" : "w-full h-[40px] mx-[3px] mt-2"
+            }`}
           >
             Search
           </button>
         </form>
+
+        {/* ---------------- results ---------------- */}
+
         <div className={`w-full flex gap-2 ${matches ? "mt-3" : " mt-10"}`}>
-          {queries?.length === 0 ? (
+          {queries.length === 0 ? (
             <div className="flex flex-col gap-1 min-w-full">
-              {" "}
               <CardSkeleton cards={10} />
             </div>
           ) : (
             <ul className={`flex flex-col gap-1 ${!openUp ? "min-w-full" : "w-1/4"}`}>
-              {queries?.map((v) => {
-                return (
-                  <li
-                    key={v.pr_jobid}
-                    onClick={() => navToJobDeatils(v.pr_jobid)}
-                    className="px-3 w-full h-16 bg-slate-100 flex items-center justify-between text-slate-700 border-2 border-solid border-slate-100 hover:border-slate-400"
-                  >
-                    <div>
-                      {
-                        <p className="text-base font-semibold">
-                          {v.pr_jobtitle}
-                        </p>
-                      }
-                    </div>
-                  </li>
-                );
-              })}
+              {currentJobs.map((v) => (
+                <li
+                  key={v.pr_jobid}
+                  onClick={() => navToJobDetails(v.pr_jobid)}
+                  className="px-3 w-full h-16 bg-slate-100 flex items-center justify-between text-slate-700 border-2 border-slate-100 hover:border-slate-400"
+                >
+                  <p className="text-base font-semibold">{v.pr_jobtitle}</p>
+                </li>
+              ))}
             </ul>
           )}
-          {openUp && (
+
+          {/* details panel */}
+          {openUp && filtered && (
             <JobDetails
-              Title={filtered.pr_title}
-              Cities={filtered.pr_cities}
-              Tasks={filtered.pr_tasks_txt}
-              Qualifications={filtered.pr_qualifications_txt}
+              Title={filtered.pr_title || ""}
+              Cities={filtered.pr_cities || ""}
+              Tasks={filtered.pr_tasks_txt || ""}
+              Qualifications={filtered.pr_qualifications_txt || ""}
               JobId={filtered.pr_jobid}
               JobTitle={filtered.pr_jobtitle}
             />
           )}
         </div>
-        <div className=" mt-10 flex items-end justify-center">
-        <Pagination
-            count={Math.ceil(Number(queries?.length )/ jobsPerPage)}
+
+        {/* ---------------- pagination ---------------- */}
+
+        <div className="mt-10 flex justify-center">
+          <Pagination
+            count={Math.ceil(queries.length / jobsPerPage)}
+            page={currentPage}
+            onChange={handleChange}
             variant="outlined"
             color="primary"
-            onClick={handleChange}
           />
         </div>
       </section>
